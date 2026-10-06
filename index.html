@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lokal Onboarding CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#172033; --ink-2:#4A556B; --ink-3:#8791A5; --line:#DDE2EA;
+  --paper:#F3F5F8; --surface:#FFFFFF; --turmeric:#E0A526; --turmeric-soft:#FBF1D9;
+  --red:#C2412D; --red-soft:#FBE7E3; --leaf:#2F7D5B; --leaf-soft:#E2F2EA; --sky:#3A6EA5; --sky-soft:#E4EEF8;
+  --r:6px; font-family:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:14px; color:var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--paper)}
+a{color:var(--sky)} button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+nav{background:var(--ink);color:#C9D0DD;padding:20px 12px;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh}
+nav .brand{color:#fff;font-weight:700;font-size:17px;padding:0 10px 18px;letter-spacing:-.01em}
+nav .brand small{display:block;color:var(--turmeric);font-weight:500;font-size:12px;margin-top:2px}
+nav a{color:inherit;text-decoration:none;padding:8px 10px;border-radius:var(--r);display:flex;justify-content:space-between}
+nav a:hover{background:#243049} nav a.on{background:#243049;color:#fff;box-shadow:inset 3px 0 0 var(--turmeric)}
+nav .grp{color:#6B778F;font-size:12px;padding:16px 10px 4px}
+nav .foot{margin-top:auto;padding:10px;font-size:13px;border-top:1px solid #2A3550}
+nav .foot label{display:flex;gap:8px;align-items:center;margin:8px 0;cursor:pointer}
+.badge{background:var(--red);color:#fff;border-radius:10px;padding:0 7px;font-size:12px;line-height:18px}
+main{padding:24px 28px;min-width:0}
+h1{font-size:24px;letter-spacing:-.02em;margin:0 0 4px} h2{font-size:16px;margin:0 0 12px} .sub{color:var(--ink-2);margin:0 0 20px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 13px;border-radius:var(--r);cursor:pointer;white-space:nowrap}
+.btn{text-decoration:none;color:inherit;display:inline-block} .btn:hover{border-color:var(--ink-3)} .btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)} .btn.go{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.btn.warn{color:var(--red)} .btn:disabled{opacity:.45;cursor:not-allowed} .btn.sm{padding:3px 9px;font-size:13px}
+input,select,textarea{border:1px solid var(--line);border-radius:var(--r);padding:7px 9px;background:#fff;min-width:0}
+textarea{width:100%;min-height:64px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)} label.f > *{color:var(--ink)}
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+table{width:100%;border-collapse:collapse;background:var(--surface)}
+th{text-align:left;font-weight:600;font-size:12.5px;color:var(--ink-2);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--surface)}
+td{padding:9px 10px;border-bottom:1px solid #EDF0F4;vertical-align:top} tr.click{cursor:pointer} tr.click:hover td{background:#F8F9FB}
+.tbl{border:1px solid var(--line);border-radius:var(--r);overflow:auto;max-height:70vh}
+td.n,th.n{text-align:right}
+.muted{color:var(--ink-3)} .small{font-size:12.5px}
+.chip{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12.5px;white-space:nowrap;background:#EEF1F5}
+.chip.new{background:var(--sky-soft);color:var(--sky)} .chip.contacted,.chip.docs_pending,.chip.classified_review{background:var(--turmeric-soft);color:#8A6210}
+.chip.ready{background:#E7E3F7;color:#5B4BA8} .chip.onboarded,.chip.verified,.chip.approved{background:var(--leaf-soft);color:var(--leaf)}
+.chip.dropped,.chip.rejected,.chip.needs_edit{background:var(--red-soft);color:var(--red)}
+/* the TAT clock: elapsed time against the SLA line */
+.tat{width:132px}.tat .bar{height:6px;background:#EDF0F4;border-radius:3px;position:relative;overflow:hidden;margin-bottom:3px}
+.tat .fill{position:absolute;inset:0 auto 0 0;background:var(--leaf)} .tat.warn .fill{background:var(--turmeric)} .tat.late .fill{background:var(--red)}
+.tat .sla{position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+.tat span{font-size:12px;color:var(--ink-2)} .tat.late span{color:var(--red);font-weight:600}
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:20px}
+.stat{padding:14px 16px;border-right:1px solid var(--line);text-decoration:none;color:inherit}.stat:last-child{border-right:0}
+.stat b{display:block;font-size:26px;letter-spacing:-.02em;font-weight:600}.stat span{color:var(--ink-2);font-size:13px}
+.stat.alert b{color:var(--red)}
+/* stage rail on lead page */
+.rail{display:flex;margin:14px 0 4px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.rail div{flex:1;padding:9px 12px;font-size:13px;color:var(--ink-3);border-right:1px solid var(--line)}.rail div:last-child{border-right:0}
+.rail div i{font-style:normal;font-weight:600;margin-right:6px}
+.rail .done{color:var(--leaf);background:var(--leaf-soft)} .rail .cur{color:var(--ink);background:var(--turmeric-soft);font-weight:600}
+.check{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #EDF0F4}.check:last-of-type{border-bottom:0}
+.tl{list-style:none;margin:0;padding:0}.tl li{padding:8px 0 8px 14px;border-left:2px solid var(--line);position:relative;font-size:13px}
+.tl li::before{content:"";position:absolute;left:-5px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--ink-3)}
+.tl li.call::before{background:var(--sky)} .tl li.onboard::before{background:var(--leaf)} .tl li.doc::before,.tl li.classified::before{background:var(--turmeric)}
+.docrow{display:grid;grid-template-columns:1fr auto;gap:6px;padding:10px 0;border-bottom:1px solid #EDF0F4}
+.login{min-height:100vh;display:grid;place-items:center;background:var(--ink)}
+.login form{background:var(--surface);padding:32px;border-radius:var(--r);width:min(360px,92vw);display:grid;gap:14px}
+.login h1{font-size:22px}.login p{margin:0;color:var(--ink-2)}
+.err{color:var(--red);font-size:13px;min-height:1em}
+dialog{border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;width:min(640px,94vw)} dialog::backdrop{background:rgba(23,32,51,.45)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r);z-index:9}
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tabs a{padding:8px 12px;text-decoration:none;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px}.tabs a.on{color:var(--ink);border-color:var(--turmeric);font-weight:600}
+pre.code{background:var(--ink);color:#E6EAF2;padding:12px;border-radius:var(--r);overflow:auto;font-size:12.5px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:10px;overflow-x:auto}
+.bars .b{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:34px;font-size:11px;color:var(--ink-3)}
+.bars .pair{display:flex;gap:2px;align-items:flex-end;height:110px}.bars .pair i{width:12px;background:var(--sky);border-radius:2px 2px 0 0}.bars .pair i+i{background:var(--leaf)}
+@media (max-width:900px){.app{grid-template-columns:1fr} nav{position:static;height:auto;flex-direction:row;flex-wrap:wrap} nav .grp,nav .foot{display:none} .grid2{grid-template-columns:1fr} main{padding:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="/app.js"></script>
+</body>
+</html>
