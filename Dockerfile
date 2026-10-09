@@ -18,4 +18,4 @@ COPY . .
 ENV DATA_DIR=/data
 
 EXPOSE 3000
-CMD ["npm", "start"]s
+CMD ["npm", "start"]
